@@ -167,12 +167,12 @@ ul.errorlist {
 }
 
 #sidebar ul li.selected {
-    background:#5993bb;
+    background:#b2d5ed;
     border-radius:4px;
 }
 
 #sidebar ul li.selected a {
-    color:#fff;
+    color:#094269;
 }
 
 #main {

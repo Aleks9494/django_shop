@@ -19,9 +19,29 @@ class Category(models.Model):
         return reverse('shop:product_list_by_category', kwargs={'category_slug': self.slug})
 
 
+class SubCategory(models.Model):
+    category = models.ForeignKey(Category, related_name='subcategories',
+                                    on_delete=models.CASCADE, verbose_name='Категории')
+    name = models.CharField(max_length=100, db_index=True, verbose_name='Название')
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='Слаг')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Подкатегория'  # название в админ-панели
+        verbose_name_plural = 'Подкатегории'  # для множественного числа
+        ordering = ['name']  # сортировка по имени в админ-панели
+
+    # формирование ссылок с переменными адресами согласно правилу в urls.py
+    def get_absolute_url(self):
+        return reverse('shop:product_list_by_subcategory', kwargs={'subcategory_slug': self.slug,
+                                                                   'category_slug': self.category.slug})
+
+
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name='products',
-                                 on_delete=models.CASCADE, verbose_name='Категории')
+    subcategory = models.ForeignKey(SubCategory, related_name='products',
+                                 on_delete=models.CASCADE, verbose_name='Подкатегории')
 
     name = models.CharField(max_length=100, db_index=True, verbose_name='Название')
     slug = models.SlugField(max_length=100, unique=True, verbose_name='Слаг')
@@ -39,4 +59,6 @@ class Product(models.Model):
         ordering = ['name']
 
     def get_absolute_url(self):
-        return reverse('shop:product_detail', kwargs={'product_slug': self.slug, 'category_slug': self.category.slug})
+        return reverse('shop:product_detail', kwargs={'product_slug': self.slug,
+                                                      'subcategory_slug': self.subcategory.slug,
+                                                      'category_slug': self.subcategory.category.slug})

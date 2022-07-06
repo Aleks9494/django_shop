@@ -44,7 +44,8 @@ class Cart(object):
     # Перебор элементов в корзине и получение продуктов из базы данных.
     def __iter__(self):
         product_ids = self.cart.keys()   # id продуктов из ключей в корзине
-        products = Product.objects.filter(id__in=product_ids)  # получение продуктов в корзине из БД
+        products = Product.objects.filter(id__in=product_ids)  # получение продуктов в корзине из БД,
+        # id должен входить в id продуктов корзины
         for product in products:
             self.cart[str(product.id)]['product'] = product  # сохранение в корзине продуктов из БД
 

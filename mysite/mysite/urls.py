@@ -21,6 +21,7 @@ from mysite import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include('api.urls', namespace='api')),
     path('orders/', include('orders.urls', namespace='orders')),  # регистрируем все маршруты приложения orders
     path('cart/', include('cart.urls', namespace='cart')),  # регистрируем все маршруты приложения cart
     path('shop/', include('shop.urls', namespace='shop'))  # регистрируем все маршруты приложения shop

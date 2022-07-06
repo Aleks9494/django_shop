@@ -7,18 +7,30 @@
 <div id="sidebar">
     <h3>Категория</h3>
         <ul>
-            <li {% if not category %} class="selected"{% endif %}>
+            <li {% if not category %} class="selected" {% endif %}>
             <a href="{% url 'shop:product_list' %}">Все</a>
             </li>
             {% for c in categories %}
             <li {% if category.slug == c.slug %} class="selected" {% endif %}>
-            <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                <a href="{{ c.get_absolute_url }}">{{ c.name }}</a><br>
+                {% if category.slug == c.slug %}
+                <ul>
+                    {% for s in subcategories %}
+                    <li {% if subcategory.slug == s.slug %} style="background:#88c8f2; border-radius:4px;" {% endif %}>
+                        <a href ="{{ s.get_absolute_url }}"> {{ s.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>
 </div>
 <div id="main" class="product-list">
-    <h1>{% if category %}{{ category.name }}{% else %}Товар{% endif %}</h1>
+    <h1 style="color:#88c8f2;">{% if category and not subcategory%}{{ category.name }}
+        {% elif subcategory%}{{ category.name }} > {{ subcategory.name }}
+        {% else %}Товар
+        {% endif %}</h1>
     {% for product in products %}
     <div class="item">
         <a href="{{ product.get_absolute_url }}">
